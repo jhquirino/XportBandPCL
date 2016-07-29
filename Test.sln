@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{3212A2EE-5295-4A25-8291-691FD0CA7E27}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSHealthAPI.Contracts (PCL)", "MSHealthAPI.Contracts\MSHealthAPI.Contracts (PCL).csproj", "{43946508-1060-4BEC-8D48-0553EAE211FD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSHealthAPI", "MSHealthAPI", "{50E67560-0BE8-4DFF-96F2-60FAC1C4D8C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSHealthAPI.Core", "MSHealthAPI.Core\MSHealthAPI.Core (PCL).csproj", "{7A9905FF-E283-4146-85FA-4E3A60BF5032}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3212A2EE-5295-4A25-8291-691FD0CA7E27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3212A2EE-5295-4A25-8291-691FD0CA7E27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3212A2EE-5295-4A25-8291-691FD0CA7E27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3212A2EE-5295-4A25-8291-691FD0CA7E27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43946508-1060-4BEC-8D48-0553EAE211FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43946508-1060-4BEC-8D48-0553EAE211FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43946508-1060-4BEC-8D48-0553EAE211FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43946508-1060-4BEC-8D48-0553EAE211FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A9905FF-E283-4146-85FA-4E3A60BF5032}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A9905FF-E283-4146-85FA-4E3A60BF5032}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A9905FF-E283-4146-85FA-4E3A60BF5032}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A9905FF-E283-4146-85FA-4E3A60BF5032}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{43946508-1060-4BEC-8D48-0553EAE211FD} = {50E67560-0BE8-4DFF-96F2-60FAC1C4D8C1}
+		{7A9905FF-E283-4146-85FA-4E3A60BF5032} = {50E67560-0BE8-4DFF-96F2-60FAC1C4D8C1}
+	EndGlobalSection
+EndGlobal
