@@ -498,7 +498,7 @@ namespace MSHealthAPI.Core
             {
                 if (!(await ValidateTokenAsync(Token, true)))
                 {
-                    throw new ArgumentNullException("Token");
+                    throw new ArgumentException("Invalid Microsoft Health Token.");
                 }
             }
             // Prepare URL request
