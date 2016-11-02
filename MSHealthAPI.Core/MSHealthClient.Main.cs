@@ -4,11 +4,12 @@
 // </copyright>
 // <author>Jorge Alberto Hernández Quirino</author>
 //-----------------------------------------------------------------------
+using System;
+using System.Text;
+using MSHealthAPI.Contracts;
+
 namespace MSHealthAPI.Core
 {
-    using Contracts;
-    using System;
-    using System.Text;
 
     /// <summary>
     /// Client to consume Microsoft Health Cloud API.
@@ -148,9 +149,9 @@ namespace MSHealthAPI.Core
         {
             get
             {
-                UriBuilder loUri = new UriBuilder(SIGNIN_URI);
-                StringBuilder loQuery = new StringBuilder();
-                string lsScopes = string.Empty;
+                var loUri = new UriBuilder(SIGNIN_URI);
+                var loQuery = new StringBuilder();
+                var lsScopes = string.Empty;
                 // Build query
                 loQuery.AppendFormat("redirect_uri={0}", Uri.EscapeDataString(REDIRECT_URI));
                 loQuery.AppendFormat("&client_id={0}", Uri.EscapeDataString(msClientId));
@@ -184,8 +185,8 @@ namespace MSHealthAPI.Core
         {
             get
             {
-                UriBuilder loUri = new UriBuilder(SIGNOUT_URI);
-                StringBuilder loQuery = new StringBuilder();
+                var loUri = new UriBuilder(SIGNOUT_URI);
+                var loQuery = new StringBuilder();
                 // Build query
                 loQuery.AppendFormat("redirect_uri={0}", Uri.EscapeDataString(REDIRECT_URI));
                 loQuery.AppendFormat("&client_id={0}", Uri.EscapeDataString(msClientId));

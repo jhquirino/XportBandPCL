@@ -1,9 +1,11 @@
-﻿namespace APIUnitTest
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MSHealthAPI.Contracts;
+using System.Threading.Tasks;
+using Serilog;
+
+namespace APIUnitTest
 {
-    using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using MSHealthAPI.Contracts;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// Class to perform Unit Tests on Client for Microsoft Health Cloud API.
@@ -39,7 +41,7 @@
         /// <summary>
         /// Client to perform requests to Microsoft Health Cloud API.
         /// </summary>
-        IMSHealthClient moClient = null;
+        IMSHealthClient moClient;
 
         #endregion
 
@@ -51,8 +53,23 @@
         [TestInitialize]
         public void Initialize()
         {
+            Serilog.Debugging.SelfLog.Enable(msg => System.Diagnostics.Debug.WriteLine(msg));
+            var levelSwitch = new Serilog.Core.LoggingLevelSwitch();
+            levelSwitch.MinimumLevel = Serilog.Events.LogEventLevel.Verbose;
+            string fileLogTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz}|{Level}|{Message}{NewLine}{Exception}";
+            if (System.Diagnostics.Debugger.IsAttached)
+                Log.Logger = new LoggerConfiguration()
+                                    .MinimumLevel.ControlledBy(levelSwitch)
+                                    .WriteTo.Debug()
+                                    .CreateLogger();
+            else
+                Log.Logger = new LoggerConfiguration()
+                                    .MinimumLevel.ControlledBy(levelSwitch)
+                                    .WriteTo.File(@"C:\temp\MSHealthAPI.log", outputTemplate: fileLogTemplate, shared: true)
+                                    .CreateLogger();
+
             moClient = new MSHealthAPI.Core.MSHealthClient(MSHEALTH_CLIENT_ID, MSHEALTH_CLIENT_SECRET, MSHEALTH_SCOPE);
-            Console.WriteLine(moClient.SignInUri);
+            Log.Information(Uri.EscapeUriString(moClient.SignInUri.ToString()));
         }
 
         #endregion
@@ -70,7 +87,7 @@
         public async Task TestHandleRedirectSignIn()
         {
             MSHealthRedirectResult loResult = MSHealthRedirectResult.None;
-            Uri loUri = new Uri("https://login.live.com/oauth20_desktop.srf?code=M3d6bd4f7-363d-c69b-404f-be70a86af8d9&lc=3082");
+            var loUri = new Uri("https://login.live.com/oauth20_desktop.srf?code=M3d6bd4f7-363d-c69b-404f-be70a86af8d9&lc=3082");
             loResult = await moClient.HandleRedirectAsync(loUri);
             Assert.AreEqual(MSHealthRedirectResult.SignIn, loResult);
             Assert.AreEqual(true, moClient.IsSignedIn);

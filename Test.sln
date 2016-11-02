@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "XportBand", "XportBand", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XportBand.Desktop", "XportBand.Desktop\XportBand.Desktop.csproj", "{F512CD61-9D95-49EB-B47B-1A03A8642E0E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.Sinks.Debug", "Serilog.Sinks.Debug\Serilog.Sinks.Debug.csproj", "{4583C566-2C58-4EC0-B247-DAAAA7A8DBF6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{F512CD61-9D95-49EB-B47B-1A03A8642E0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F512CD61-9D95-49EB-B47B-1A03A8642E0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F512CD61-9D95-49EB-B47B-1A03A8642E0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4583C566-2C58-4EC0-B247-DAAAA7A8DBF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4583C566-2C58-4EC0-B247-DAAAA7A8DBF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4583C566-2C58-4EC0-B247-DAAAA7A8DBF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4583C566-2C58-4EC0-B247-DAAAA7A8DBF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

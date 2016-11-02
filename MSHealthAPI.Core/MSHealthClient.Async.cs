@@ -4,17 +4,18 @@
 // </copyright>
 // <author>Jorge Alberto Hernández Quirino</author>
 //-----------------------------------------------------------------------
+using System;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+using MSHealthAPI.Contracts;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
 namespace MSHealthAPI.Core
 {
-    using Contracts;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
-    using System;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Text;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// Client to consume Microsoft Health Cloud API.
@@ -37,12 +38,12 @@ namespace MSHealthAPI.Core
             if (uri != null &&
                 uri.LocalPath.StartsWith(AUTH_PATH, StringComparison.OrdinalIgnoreCase))
             {
-                HttpValueCollection loValues = HttpUtility.ParseQueryString(uri.Query);
+                var loValues = HttpUtility.ParseQueryString(uri.Query);
                 // Read Authentication Code
-                HttpValue loCode = loValues.FirstOrDefault((entry) => entry.Key.Equals("code", StringComparison.OrdinalIgnoreCase));
+                var loCode = loValues.FirstOrDefault((entry) => entry.Key.Equals("code", StringComparison.OrdinalIgnoreCase));
                 // Read Authentication Errors
-                HttpValue loError = loValues.FirstOrDefault((entry) => entry.Key.Equals("error", StringComparison.OrdinalIgnoreCase));
-                HttpValue loErrorDesc = loValues.FirstOrDefault((entry) => entry.Key.Equals("error_description", StringComparison.OrdinalIgnoreCase));
+                var loError = loValues.FirstOrDefault((entry) => entry.Key.Equals("error", StringComparison.OrdinalIgnoreCase));
+                var loErrorDesc = loValues.FirstOrDefault((entry) => entry.Key.Equals("error_description", StringComparison.OrdinalIgnoreCase));
                 // Check the code to see if this is sign-in or sign-out
                 if (loCode != null)
                 {
@@ -99,7 +100,7 @@ namespace MSHealthAPI.Core
                                                                   int? maxPageSize = default(int?))
         {
             MSHealthActivities loActivities = null;
-            StringBuilder loQuery = new StringBuilder();
+            var loQuery = new StringBuilder();
             string lsResponse;
             string lsParamValue;
             // Check StartTime, and append to query if applies
@@ -165,9 +166,9 @@ namespace MSHealthAPI.Core
                 case MSHealthSplitDistanceType.Kilometer:
                     loQuery.AppendFormat("&splitDistanceType={0}", MSHealthSplitDistanceType.Kilometer);
                     break;
-                case MSHealthSplitDistanceType.None:
-                default:
-                    break;
+                //case MSHealthSplitDistanceType.None:
+                //default:
+                //    break;
             }
             // Check MaxPageSize, and append to query if applies
             if (maxPageSize != null && maxPageSize.HasValue && maxPageSize.Value > 0)
@@ -176,7 +177,7 @@ namespace MSHealthAPI.Core
             // Perform request using BASE_URI, ACTIVITIES_PATH and query string
             lsResponse = await PerformRequestAsync(ACTIVITIES_PATH, loQuery.ToString().TrimStart(new char[] { '&' }));
             // Deserialize Json response (use Converters for Enum, DateTime and TimeSpan values)
-            JsonSerializerSettings loSerializerSettings = new JsonSerializerSettings();
+            var loSerializerSettings = new JsonSerializerSettings();
             loSerializerSettings.Converters.Add(new StringEnumConverter());
             loSerializerSettings.Converters.Add(new IsoDateTimeConverter());
             loSerializerSettings.Converters.Add(new TimeSpanConverter());
@@ -196,7 +197,7 @@ namespace MSHealthAPI.Core
         public async Task<MSHealthSummaries> ListDailySummariesAsync(DateTime? startTime = default(DateTime?), DateTime? endTime = default(DateTime?), string deviceIds = null, int? maxPageSize = default(int?))
         {
             MSHealthSummaries loSummaries = null;
-            StringBuilder loQuery = new StringBuilder();
+            var loQuery = new StringBuilder();
             string lsResponse;
 
             // Check StartTime, and append to query if applies
@@ -215,7 +216,7 @@ namespace MSHealthAPI.Core
             // Perform request using BASE_URI, SUMMARIES_DAILY_PATH and query string
             lsResponse = await PerformRequestAsync(SUMMARIES_DAILY_PATH, loQuery.ToString().TrimStart(new char[] { '&' }));
             // Deserialize Json response (use Converters for Enum, DateTime and TimeSpan values)
-            JsonSerializerSettings loSerializerSettings = new JsonSerializerSettings();
+            var loSerializerSettings = new JsonSerializerSettings();
             loSerializerSettings.Converters.Add(new StringEnumConverter());
             loSerializerSettings.Converters.Add(new IsoDateTimeConverter());
             loSerializerSettings.Converters.Add(new TimeSpanConverter());
@@ -235,7 +236,7 @@ namespace MSHealthAPI.Core
         public async Task<MSHealthSummaries> ListHourlySummariesAsync(DateTime? startTime = default(DateTime?), DateTime? endTime = default(DateTime?), string deviceIds = null, int? maxPageSize = default(int?))
         {
             MSHealthSummaries loSummaries = null;
-            StringBuilder loQuery = new StringBuilder();
+            var loQuery = new StringBuilder();
             string lsResponse;
 
             // Check StartTime, and append to query if applies
@@ -254,7 +255,7 @@ namespace MSHealthAPI.Core
             // Perform request using BASE_URI, SUMMARIES_HOURLY_PATH and query string
             lsResponse = await PerformRequestAsync(SUMMARIES_HOURLY_PATH, loQuery.ToString().TrimStart(new char[] { '&' }));
             // Deserialize Json response (use Converters for Enum, DateTime and TimeSpan values)
-            JsonSerializerSettings loSerializerSettings = new JsonSerializerSettings();
+            var loSerializerSettings = new JsonSerializerSettings();
             loSerializerSettings.Converters.Add(new StringEnumConverter());
             loSerializerSettings.Converters.Add(new IsoDateTimeConverter());
             loSerializerSettings.Converters.Add(new TimeSpanConverter());
@@ -286,7 +287,7 @@ namespace MSHealthAPI.Core
         public async Task<MSHealthActivity> ReadActivityAsync(string id, MSHealthActivityInclude include = MSHealthActivityInclude.None)
         {
             MSHealthActivity loActivity = null;
-            StringBuilder loQuery = new StringBuilder();
+            var loQuery = new StringBuilder();
             string lsResponse;
             string lsParamValue;
 
@@ -306,7 +307,7 @@ namespace MSHealthAPI.Core
             // Perform request using BASE_URI, ACTIVITY_PATH, id and query string
             lsResponse = await PerformRequestAsync(string.Format(ACTIVITY_PATH, id), loQuery.ToString().TrimStart(new char[] { '&' }));
             // Deserialize Json response (use Converters for Enum, DateTime and TimeSpan values)
-            JsonSerializerSettings loSerializerSettings = new JsonSerializerSettings();
+            var loSerializerSettings = new JsonSerializerSettings();
             loSerializerSettings.Converters.Add(new StringEnumConverter());
             loSerializerSettings.Converters.Add(new IsoDateTimeConverter());
             loSerializerSettings.Converters.Add(new TimeSpanConverter());
@@ -423,8 +424,8 @@ namespace MSHealthAPI.Core
         private async Task<MSHealthToken> GetTokenAsync(string code, bool isRefresh)
         {
             MSHealthToken loToken = null;
-            UriBuilder loUri = new UriBuilder(TOKEN_URI);
-            StringBuilder loQuery = new StringBuilder();
+            var loUri = new UriBuilder(TOKEN_URI);
+            var loQuery = new StringBuilder();
             WebRequest loWebRequest;
             // Build base query
             loQuery.AppendFormat("redirect_uri={0}", Uri.EscapeDataString(REDIRECT_URI));
@@ -455,7 +456,7 @@ namespace MSHealthAPI.Core
                     {
                         using (StreamReader loStreamReader = new StreamReader(loResponseStream))
                         {
-                            string lsResponse = loStreamReader.ReadToEnd();
+                            var lsResponse = loStreamReader.ReadToEnd();
                             // TODO: Parse JSON error
                             //JsonObject loJsonResponse = JsonObject.Parse(lsResponse);
                             //IJsonValue loJsonValue = null;
@@ -505,7 +506,7 @@ namespace MSHealthAPI.Core
             loUriBuilder = new UriBuilder(BASE_URI);
             loUriBuilder.Path += path;
             loUriBuilder.Query = query;
-            WebRequest loWebRequest = WebRequest.Create(loUriBuilder.Uri); //HttpWebRequest.Create(loUriBuilder.Uri);
+            var loWebRequest = WebRequest.Create(loUriBuilder.Uri); //HttpWebRequest.Create(loUriBuilder.Uri);
             loWebRequest.Headers[HttpRequestHeader.Authorization] = string.Format("{0} {1}", Token.TokenType, Token.AccessToken);
             try
             {
