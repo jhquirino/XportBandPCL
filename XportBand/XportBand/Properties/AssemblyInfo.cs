@@ -1,15 +1,17 @@
-﻿using System.Reflection;
-using System.Resources;
+﻿using System.Resources;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Serilog.Sinks.Debug")]
-[assembly: AssemblyDescription("Write Serilog events to System.Diagnostics.Debug output.")]
+[assembly: AssemblyTitle("XportBand")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Yorch's Ideas")]
-[assembly: AssemblyProduct("Serilog.Sinks.Debug")]
-[assembly: AssemblyCopyright("Copyright © Jorge Alberto Hernández Quirino 2016")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("XportBand")]
+[assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en")]

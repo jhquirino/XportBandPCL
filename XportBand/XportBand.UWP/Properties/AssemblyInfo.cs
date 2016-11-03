@@ -1,18 +1,18 @@
 ﻿using System.Reflection;
-using System.Resources;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Serilog.Sinks.Debug")]
-[assembly: AssemblyDescription("Write Serilog events to System.Diagnostics.Debug output.")]
+[assembly: AssemblyTitle("XportBand.UWP")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Yorch's Ideas")]
-[assembly: AssemblyProduct("Serilog.Sinks.Debug")]
-[assembly: AssemblyCopyright("Copyright © Jorge Alberto Hernández Quirino 2016")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("XportBand.UWP")]
+[assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: NeutralResourcesLanguage("en")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -26,3 +26,4 @@ using System.Resources;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: ComVisible(false)]

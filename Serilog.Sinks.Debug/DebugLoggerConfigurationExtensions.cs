@@ -1,4 +1,10 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------
+// <copyright file="DebugLoggerConfigurationExtensions.cs" company="Jorge Alberto Hernández Quirino">
+// Copyright (c) Jorge Alberto Hernández Quirino 2015-2016. All rights reserved.
+// </copyright>
+// <author>Jorge Alberto Hernández Quirino</author>
+//-----------------------------------------------------------------------
+using System;
 using Serilog.Configuration;
 using Serilog.Events;
 using Serilog.Formatting.Display;
@@ -7,9 +13,22 @@ using Serilog.Sinks.Debug;
 namespace Serilog
 {
 
+    /// <summary>
+    /// Extends <see cref="LoggerConfiguration" /> with methods to add debug sinks.
+    /// </summary>
     public static class DebugLoggerConfigurationExtensions
     {
+
+        #region Constants
+
+        /// <summary>
+        /// Default template for log output: "{Timestamp} [{Level}] {Message}{NewLine}{Exception}".
+        /// </summary>
         private const string DefaultOutputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] {Message}{NewLine}{Exception}";
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Writes log events to <see cref="System.Diagnostics.Debug"/>.
@@ -31,6 +50,8 @@ namespace Serilog
             var formatter = new MessageTemplateTextFormatter(outputTemplate, formatProvider);
             return sinkConfiguration.Sink(new DebugSink(formatter), restrictedToMinimumLevel);
         }
+
+        #endregion
 
     }
 

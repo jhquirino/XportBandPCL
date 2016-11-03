@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using MSHealthAPI.Contracts;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -38,6 +39,7 @@ namespace MSHealthAPI.Core
             if (uri != null &&
                 uri.LocalPath.StartsWith(AUTH_PATH, StringComparison.OrdinalIgnoreCase))
             {
+                Serilog.Log.ForContext<MSHealthClient>().Debug("Handling MSHealthClient redirect.");
                 var loValues = HttpUtility.ParseQueryString(uri.Query);
                 // Read Authentication Code
                 var loCode = loValues.FirstOrDefault((entry) => entry.Key.Equals("code", StringComparison.OrdinalIgnoreCase));
@@ -75,6 +77,7 @@ namespace MSHealthAPI.Core
                     loResult = MSHealthRedirectResult.SignOut;
                 }
             }
+            Serilog.Log.ForContext<MSHealthClient>().Debug("MSHealthClient redirect handled. Result: {result}", loResult);
             return loResult;
         }
 
@@ -446,6 +449,7 @@ namespace MSHealthAPI.Core
             }
             // Prepare complete URL
             loUri.Query = loQuery.ToString();
+            Serilog.Log.ForContext<MSHealthClient>().Debug("GET {uri}", loUri.Uri);
             loWebRequest = WebRequest.Create(loUri.Uri);//HttpWebRequest.Create(loUri.Uri);
             try
             {
@@ -466,6 +470,7 @@ namespace MSHealthAPI.Core
                             //    lsError = loJsonValue.GetString();
                             //if (!string.IsNullOrEmpty(lsError))
                             //    throw new Exception(lsError);
+                            Serilog.Log.ForContext<MSHealthClient>().Verbose(lsResponse);
 
                             // Deserialize Json response
                             loToken = JsonConvert.DeserializeObject<MSHealthToken>(lsResponse);
@@ -499,13 +504,14 @@ namespace MSHealthAPI.Core
             {
                 if (!(await ValidateTokenAsync(Token, true)))
                 {
-                    throw new ArgumentException("Invalid Microsoft Health Token.");
+                    throw new ArgumentException("Invalid Microsoft Health Token.", nameof(Token));
                 }
             }
             // Prepare URL request
             loUriBuilder = new UriBuilder(BASE_URI);
             loUriBuilder.Path += path;
             loUriBuilder.Query = query;
+            Serilog.Log.ForContext<MSHealthClient>().Debug("GET {uri}", loUriBuilder.Uri);
             var loWebRequest = WebRequest.Create(loUriBuilder.Uri); //HttpWebRequest.Create(loUriBuilder.Uri);
             loWebRequest.Headers[HttpRequestHeader.Authorization] = string.Format("{0} {1}", Token.TokenType, Token.AccessToken);
             try
@@ -519,12 +525,14 @@ namespace MSHealthAPI.Core
                         {
                             // Get response as string
                             lsResponse = await loStreamReader.ReadToEndAsync();
+                            Serilog.Log.ForContext<MSHealthClient>().Verbose(lsResponse);
                         }
                     }
                 }
             }
             catch (Exception loException)
             {
+                Serilog.Log.ForContext<MSHealthClient>().Error(loException, "MSHealthClient: PerformRequest error.");
                 throw new MSHealthException(loException.Message, loException, path, query);
             }
 

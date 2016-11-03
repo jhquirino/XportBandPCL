@@ -4,17 +4,19 @@
 // </copyright>
 // <author>Jorge Alberto Hernández Quirino</author>
 //-----------------------------------------------------------------------
+using System;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web;
+using MSHealthAPI.Contracts;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
 namespace MSHealthAPI.Core
 {
-    using Contracts;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
-    using System;
-    using System.IO;
-    using System.Linq;
-    using System.Net;
-    using System.Text;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// Client to consume Microsoft Health Cloud API.

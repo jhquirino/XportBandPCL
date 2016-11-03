@@ -17,12 +17,13 @@
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
     <TargetFrameworkProfile />
+    <OutputPath>..\bin\$(Configuration)\$(Platform)</OutputPath>
+    <IntermediateOutputPath>..\obj\$(Configuration)\$(Platform)</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -30,7 +31,6 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -63,13 +63,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MSHealthAPI.Contracts\MSHealthAPI.Contracts %28PCL%29.csproj">
+    <ProjectReference Include="..\MSHealthAPI.Contracts\MSHealthAPI.Contracts.csproj">
       <Project>{43946508-1060-4bec-8d48-0553eae211fd}</Project>
-      <Name>MSHealthAPI.Contracts %28PCL%29</Name>
+      <Name>MSHealthAPI.Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MSHealthAPI.Core\MSHealthAPI.Core %28PCL%29.csproj">
+    <ProjectReference Include="..\MSHealthAPI.Core\MSHealthAPI.Core.csproj">
       <Project>{7a9905ff-e283-4146-85fa-4e3a60bf5032}</Project>
-      <Name>MSHealthAPI.Core %28PCL%29</Name>
+      <Name>MSHealthAPI.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Serilog.Sinks.Debug\Serilog.Sinks.Debug.csproj">
       <Project>{4583c566-2c58-4ec0-b247-daaaa7a8dbf6}</Project>
