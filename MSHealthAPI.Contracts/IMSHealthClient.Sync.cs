@@ -4,9 +4,10 @@
 // </copyright>
 // <author>Jorge Alberto Hernández Quirino</author>
 //-----------------------------------------------------------------------
+using System;
+
 namespace MSHealthAPI.Contracts
 {
-    using System;
 
     /// <summary>
     /// Interface for Client to consume Microsoft Health Cloud API.

@@ -122,6 +122,7 @@ namespace XportBand.ViewModel
         /// Handles NavigationCompleted event from WebView.
         /// </summary>
         /// <param name="args">Arguments for event.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Command actions must return void")]
         private async void Navigated(object args)
         {
             Uri navigatedUri = null;

@@ -4,9 +4,10 @@
 // </copyright>
 // <author>Jorge Alberto Hernández Quirino</author>
 //-----------------------------------------------------------------------
+using System;
+
 namespace MSHealthAPI.Contracts
 {
-    using System;
 
     /// <summary>
     /// Scopes (or access types) for different types of user data on Microsoft Health.

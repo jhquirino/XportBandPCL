@@ -4,11 +4,12 @@
 // </copyright>
 // <author>Jorge Alberto Hernández Quirino</author>
 //-----------------------------------------------------------------------
+using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+
 namespace MSHealthAPI.Contracts
 {
-    using Newtonsoft.Json;
-    using System;
-    using System.Collections.Generic;
 
     /// <summary>
     /// Represents details about an activity.

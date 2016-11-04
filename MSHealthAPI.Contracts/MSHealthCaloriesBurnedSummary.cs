@@ -4,9 +4,10 @@
 // </copyright>
 // <author>Jorge Alberto Hernández Quirino</author>
 //-----------------------------------------------------------------------
+using Newtonsoft.Json;
+
 namespace MSHealthAPI.Contracts
 {
-    using Newtonsoft.Json;
 
     /// <summary>
     /// Represents the summary of calories burned during a period.

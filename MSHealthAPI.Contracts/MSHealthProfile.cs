@@ -4,10 +4,11 @@
 // </copyright>
 // <author>Jorge Alberto Hernández Quirino</author>
 //-----------------------------------------------------------------------
+using System;
+using Newtonsoft.Json;
+
 namespace MSHealthAPI.Contracts
 {
-    using Newtonsoft.Json;
-    using System;
 
     /// <summary>
     /// General profile of the person using Microsoft Health.

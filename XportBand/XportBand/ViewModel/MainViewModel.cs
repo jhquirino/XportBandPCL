@@ -5,6 +5,7 @@
 // <author>Jorge Alberto Hernández Quirino</author>
 //-----------------------------------------------------------------------
 using System;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -39,9 +40,27 @@ namespace XportBand.ViewModel
         private readonly IMSHealthClient _msHealthClient;
 
         /// <summary>
+        /// Inner member for <see cref="Activities"/> property.
+        /// </summary>
+        private ObservableCollection<MSHealthActivity> _activities;
+
+        /// <summary>
         /// Backing store for <see cref="ListActivitiesCommand"/> property.
         /// </summary>
         private ICommand _listActivitiesCommand;
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets the collection of Activities found by specified criteria.
+        /// </summary>
+        public ObservableCollection<MSHealthActivity> Activities
+        {
+            get { return _activities ?? (_activities = new ObservableCollection<MSHealthActivity>()); }
+            set { Set(() => Activities, ref _activities, value); }
+        }
 
         #endregion
 
@@ -76,13 +95,27 @@ namespace XportBand.ViewModel
 
         #region Commands Execution
 
-#pragma warning disable RECS0165 // Asynchronous methods should return a Task instead of void
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Potential Code Quality Issues", "RECS0165:Asynchronous methods should return a Task instead of void", Justification = "Command actions must return void")]
         private async void ListActivities()
-#pragma warning restore RECS0165 // Asynchronous methods should return a Task instead of void
         {
             try
             {
+                Activities.Clear();
                 var activities = await _msHealthClient.ListActivitiesAsync();
+                if (activities?.BikeActivities != null)
+                    foreach (var activity in activities.BikeActivities) { Activities.Add(activity); }
+                if (activities?.RunActivities != null)
+                    foreach (var activity in activities.RunActivities) { Activities.Add(activity); }
+                if (activities?.SleepActivities != null)
+                    foreach (var activity in activities.SleepActivities) { Activities.Add(activity); }
+                if (activities?.FreePlayActivities != null)
+                    foreach (var activity in activities.FreePlayActivities) { Activities.Add(activity); }
+                if (activities?.GolfActivities != null)
+                    foreach (var activity in activities.GolfActivities) { Activities.Add(activity); }
+                if (activities?.GuidedWorkoutActivities != null)
+                    foreach (var activity in activities.GuidedWorkoutActivities) { Activities.Add(activity); }
+                if (activities?.HikeActivities != null)
+                    foreach (var activity in activities.HikeActivities) { Activities.Add(activity); }
                 await _dialogService.ShowMessage($"{activities.ItemCount:N0} activities found.", "Activities");
             }
             catch (Exception exception)

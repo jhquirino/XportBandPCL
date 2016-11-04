@@ -4,17 +4,18 @@
 // </copyright>
 // <author>Jorge Alberto Hernández Quirino</author>
 //-----------------------------------------------------------------------
+using System;
+using System.IO;
+using System.Net;
+using Newtonsoft.Json;
+
 namespace MSHealthAPI.Contracts
 {
-    using Newtonsoft.Json;
-    using System;
-    using System.IO;
-    using System.Net;
 
     /// <summary>
     /// Represents error that occur during <see cref="IMSHealthClient"/> operations execution.
     /// </summary>
-    /// <seealso cref="System.Exception" />
+    /// <seealso cref="Exception" />
     public sealed class MSHealthException : Exception
     {
 

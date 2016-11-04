@@ -4,10 +4,11 @@
 // </copyright>
 // <author>Jorge Alberto Hernández Quirino</author>
 //-----------------------------------------------------------------------
+using System.Collections.Generic;
+using Newtonsoft.Json;
+
 namespace MSHealthAPI.Contracts
 {
-    using Newtonsoft.Json;
-    using System.Collections.Generic;
 
     /// <summary>
     /// Represents details about the devices associated with user's Microsoft Health profile.

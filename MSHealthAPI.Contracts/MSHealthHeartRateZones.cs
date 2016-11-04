@@ -4,10 +4,10 @@
 // </copyright>
 // <author>Jorge Alberto Hernández Quirino</author>
 //-----------------------------------------------------------------------
+using Newtonsoft.Json;
+
 namespace MSHealthAPI.Contracts
 {
-    using Newtonsoft.Json;
-    using System;
 
     /// <summary>
     /// Represents the mapping of the amount of time spent in a given heart rate zone during a segment.
