@@ -1,11 +1,49 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <ContentPage x:Class="XportBand.View.MainView"
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:XportBand">
+             xmlns:i18n="clr-namespace:XportBand;assembly=XportBand"
+             Title="{i18n:Translate TitleApp}">
 
-    <Label HorizontalOptions="Center"
-           Text="Welcome to Xamarin Forms!"
-           VerticalOptions="Center" />
-
+    <!--<ContentPage.ToolbarItems>
+        <ToolbarItem Name="Refresh"
+                     Command="{Binding ListActivitiesCommand}"
+                     Order="Primary"
+                     Priority="0"
+                     Text="{i18n:Translate ButtonRefresh}" />
+    </ContentPage.ToolbarItems>-->
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <!--<Label Grid.Row="0"
+                   Grid.Column="0"
+                   HorizontalOptions="Start"
+                   VerticalOptions="Center"
+                   Text="{i18n:Translate TitleApp}" />-->
+            <Label Grid.Row="1"
+                   Grid.Column="0"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   Text="MVVM Xamarin Forms!" />
+            <!--<StackLayout Grid.Row="2"
+                         Grid.Column="0"
+                         HorizontalOptions="CenterAndExpand"
+                         Orientation="Horizontal">
+                <Button Text="{i18n:Translate ButtonSettings}" />
+                <Button Command="{Binding ListActivitiesCommand}" Text="{i18n:Translate ButtonRefresh}" />
+                <Button Text="{i18n:Translate ButtonDetails}" />
+            </StackLayout>-->
+        </Grid>
+    </ContentPage.Content>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Name="Refresh"
+                     Command="{Binding ListActivitiesCommand}"
+                     Order="Primary"
+                     Priority="0"
+                     Text="{i18n:Translate ButtonDetails}" />
+    </ContentPage.ToolbarItems>
 </ContentPage>

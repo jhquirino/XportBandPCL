@@ -8,22 +8,21 @@ using XportBand.ViewModel;
 
 namespace XportBand.View
 {
-
-	public partial class MainView : ContentPage
+	public partial class SettingsView : ContentPage
 	{
 
-		public MainViewModel ViewModel
+		public SettingsViewModel ViewModel
 		{
 			get
 			{
-				return (MainViewModel)BindingContext;
+				return (SettingsViewModel)BindingContext;
 			}
 		}
 
-		public MainView()
+		public SettingsView()
 		{
 			InitializeComponent();
-			BindingContext = App.Locator.Main;
+			BindingContext = App.Locator.Settings;
 		}
 
 	}
