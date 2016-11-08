@@ -8,12 +8,15 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using MSHealthAPI.Contracts;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 
 namespace MSHealthAPI.Core
 {
@@ -25,7 +28,7 @@ namespace MSHealthAPI.Core
     {
 
         #region IMSHealthClient Sync implementation
-        
+
         /// <summary>
         /// Handles redirect when accessing to Microsoft Health, to determine if 
         /// Sign-in/Sign-out process was successfull.
@@ -91,13 +94,13 @@ namespace MSHealthAPI.Core
         /// <param name="splitDistanceType">The length of splits (<see cref="MSHealthSplitDistanceType"/>) used in each activity.</param>
         /// <param name="maxPageSize">The maximum number of entries to return per page.</param>
         /// <returns>Instance of <see cref="MSHealthActivities"/> with collection of activities that matched specified parameters.</returns>
-        public MSHealthActivities ListActivities(DateTime? startTime = default(DateTime?), 
-                                                 DateTime? endTime = default(DateTime?), 
-                                                 string ids = null, 
-                                                 MSHealthActivityType type = MSHealthActivityType.Unknown, 
-                                                 MSHealthActivityInclude include = MSHealthActivityInclude.None, 
-                                                 string deviceIds = null, 
-                                                 MSHealthSplitDistanceType splitDistanceType = MSHealthSplitDistanceType.None, 
+        public MSHealthActivities ListActivities(DateTime? startTime = default(DateTime?),
+                                                 DateTime? endTime = default(DateTime?),
+                                                 string ids = null,
+                                                 MSHealthActivityType type = MSHealthActivityType.Unknown,
+                                                 MSHealthActivityInclude include = MSHealthActivityInclude.None,
+                                                 string deviceIds = null,
+                                                 MSHealthSplitDistanceType splitDistanceType = MSHealthSplitDistanceType.None,
                                                  int? maxPageSize = default(int?))
         {
             MSHealthActivities loActivities = null;
@@ -195,9 +198,9 @@ namespace MSHealthAPI.Core
         /// <param name="deviceIds">Filters the set of returned summaries based on the comma-separated list of device ids provided.</param>
         /// <param name="maxPageSize">The maximum number of entries to return per page. Defaults to 48 for hourly and 31 for daily.</param>
         /// <returns>Instance of <see cref="MSHealthSummaries"/> with summary details.</returns>
-        public MSHealthSummaries ListDailySummaries(DateTime? startTime = default(DateTime?), 
-                                                    DateTime? endTime = default(DateTime?), 
-                                                    string deviceIds = null, 
+        public MSHealthSummaries ListDailySummaries(DateTime? startTime = default(DateTime?),
+                                                    DateTime? endTime = default(DateTime?),
+                                                    string deviceIds = null,
                                                     int? maxPageSize = default(int?))
         {
             MSHealthSummaries loSummaries = null;
@@ -237,9 +240,9 @@ namespace MSHealthAPI.Core
         /// <param name="deviceIds">Filters the set of returned summaries based on the comma-separated list of device ids provided.</param>
         /// <param name="maxPageSize">The maximum number of entries to return per page. Defaults to 48 for hourly and 31 for daily.</param>
         /// <returns>Instance of <see cref="MSHealthSummaries"/> with summary details.</returns>
-        public MSHealthSummaries ListHourlySummaries(DateTime? startTime = default(DateTime?), 
-                                                     DateTime? endTime = default(DateTime?), 
-                                                     string deviceIds = null, 
+        public MSHealthSummaries ListHourlySummaries(DateTime? startTime = default(DateTime?),
+                                                     DateTime? endTime = default(DateTime?),
+                                                     string deviceIds = null,
                                                      int? maxPageSize = default(int?))
         {
             MSHealthSummaries loSummaries = null;
@@ -433,7 +436,6 @@ namespace MSHealthAPI.Core
             MSHealthToken loToken = null;
             UriBuilder loUri = new UriBuilder(TOKEN_URI);
             StringBuilder loQuery = new StringBuilder();
-            WebRequest loWebRequest;
             // Build base query
             loQuery.AppendFormat("redirect_uri={0}", Uri.EscapeDataString(REDIRECT_URI));
             loQuery.AppendFormat("&client_id={0}", Uri.EscapeDataString(msClientId));
@@ -453,34 +455,33 @@ namespace MSHealthAPI.Core
             }
             // Prepare complete URL
             loUri.Query = loQuery.ToString();
-            loWebRequest = WebRequest.Create(loUri.Uri);
+            Serilog.Log.ForContext<MSHealthClient>().Debug("GET {uri}", loUri.Uri);
             try
             {
-                // Perform request and handle response
-                using (WebResponse loWebResponse = Task.Run(() => loWebRequest.GetResponseAsync()).Result)
+                using (var httpClient = new HttpClient())
                 {
-                    using (Stream loResponseStream = loWebResponse.GetResponseStream())
+                    using (var request = new HttpRequestMessage(HttpMethod.Get, loUri.Uri))
                     {
-                        using (StreamReader loStreamReader = new StreamReader(loResponseStream))
+                        using (var response = Task.Run(() => httpClient.SendAsync(request)).Result)
                         {
-                            string lsResponse = loStreamReader.ReadToEnd();
-                            // TODO: Parse JSON error
-                            //JsonObject loJsonResponse = JsonObject.Parse(lsResponse);
-                            //IJsonValue loJsonValue = null;
-                            //string lsError = null;
-                            //// Check for error
-                            //if (loJsonResponse.TryGetValue("error", out loJsonValue) && loJsonValue != null)
-                            //    lsError = loJsonValue.GetString();
-                            //if (!string.IsNullOrEmpty(lsError))
-                            //    throw new Exception(lsError);
-
-                            // Deserialize Json response
+                            var lsResponse = Task.Run(() => response.Content.ReadAsStringAsync()).Result;
+                            Serilog.Log.ForContext<MSHealthClient>().Verbose(lsResponse);
+                            // Parse JSON error (if exists)
+                            dynamic jsonResponse = JObject.Parse(lsResponse);
+                            var error = (string)jsonResponse.error;
+                            if (!string.IsNullOrEmpty(error))
+                                throw new MSHealthException(error, null, loUri.Path, loUri.Query);
+                            // Deserialize success Json response
                             loToken = JsonConvert.DeserializeObject<MSHealthToken>(lsResponse);
                             if (string.IsNullOrEmpty(loToken.RefreshToken))
                                 loToken.RefreshToken = code;
                         }
                     }
                 }
+            }
+            catch (MSHealthException)
+            {
+                throw;
             }
             catch (Exception loException)
             {
@@ -513,25 +514,27 @@ namespace MSHealthAPI.Core
             loUriBuilder = new UriBuilder(BASE_URI);
             loUriBuilder.Path += path;
             loUriBuilder.Query = query;
-            WebRequest loWebRequest = WebRequest.Create(loUriBuilder.Uri); //HttpWebRequest.Create(loUriBuilder.Uri);
-            loWebRequest.Headers[HttpRequestHeader.Authorization] = string.Format("{0} {1}", Token.TokenType, Token.AccessToken);
+            Serilog.Log.ForContext<MSHealthClient>().Debug("GET {uri}", loUriBuilder.Uri);
             try
             {
                 // Perform request and handle response
-                using (WebResponse loWebResponse = Task.Run(() => loWebRequest.GetResponseAsync()).Result)
+                using (var httpClient = new HttpClient())
                 {
-                    using (Stream loResponseStream = loWebResponse.GetResponseStream())
+                    using (var request = new HttpRequestMessage(HttpMethod.Get, loUriBuilder.Uri))
                     {
-                        using (StreamReader loStreamReader = new StreamReader(loResponseStream))
+                        request.Headers.Authorization = new AuthenticationHeaderValue(Token.TokenType, Token.AccessToken);
+                        using (var response = Task.Run(() => httpClient.SendAsync(request)).Result)
                         {
                             // Get response as string
-                            lsResponse = loStreamReader.ReadToEnd();
+                            lsResponse = Task.Run(() => response.Content.ReadAsStringAsync()).Result;
+                            Serilog.Log.ForContext<MSHealthClient>().Verbose(lsResponse);
                         }
                     }
                 }
             }
             catch (Exception loException)
             {
+                Serilog.Log.ForContext<MSHealthClient>().Error(loException, "MSHealthClient: PerformRequest error.");
                 throw new MSHealthException(loException.Message, loException, path, query);
             }
 

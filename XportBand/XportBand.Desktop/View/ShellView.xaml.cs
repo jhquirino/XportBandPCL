@@ -1,7 +1,9 @@
-﻿namespace XportBand.View
+﻿using System.Windows;
+using MahApps.Metro.Controls;
+using XportBand.Model;
+
+namespace XportBand.View
 {
-    using System.Windows;
-    using MahApps.Metro.Controls;
 
     /// <summary>
     /// Description for ShellView.
@@ -14,6 +16,29 @@
         public ShellView()
         {
             InitializeComponent();
+            DataContext = App.Locator.Shell;
         }
+
+        private void dckManager_ActiveContentChanged(object sender, System.EventArgs e)
+        {
+            INavigable navigable = null;
+            if (dockMain.IsActive)
+            {
+                navigable = vwMain.ViewModel as INavigable;
+            }
+            else if (dockSettings.IsActive)
+            {
+                navigable = vwSettings.ViewModel as INavigable;
+            }
+            else if (dockDetails.IsActive)
+            {
+                //navigable = vwDetails.ViewModel as INavigable;
+            }
+
+
+            if (navigable != null) navigable.Activate(null);
+        }
+
     }
+
 }

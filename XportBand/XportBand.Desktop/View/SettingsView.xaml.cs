@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Controls;
 using GalaSoft.MvvmLight.Messaging;
+using XportBand.ViewModel;
 
 namespace XportBand.View
 {
@@ -10,6 +11,14 @@ namespace XportBand.View
     public partial class SettingsView : UserControl
     {
 
+        public SettingsViewModel ViewModel
+        {
+            get
+            {
+                return (SettingsViewModel)DataContext;
+            }
+        }
+
         #region Constructors
 
         /// <summary>
@@ -18,6 +27,7 @@ namespace XportBand.View
         public SettingsView()
         {
             InitializeComponent();
+            DataContext = App.Locator.Settings;
             // Register MVVM Message (handles URI navigation)
             Messenger.Default.Register<Uri>(this, (uri) => HandleNavigateUri(uri));
         }

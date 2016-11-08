@@ -6,8 +6,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              d:DesignHeight="300"
              d:DesignWidth="300"
-             DataContext="{Binding Main,
-                                   Source={StaticResource Locator}}"
              mc:Ignorable="d ignore">
 
     <Grid>
@@ -22,9 +20,14 @@
         <ListBox Grid.Row="1"
                  Grid.Column="0"
                  ItemsSource="{Binding Activities}">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                </Style>
+            </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
+                    <Grid ShowGridLines="True">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />

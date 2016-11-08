@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using GalaSoft.MvvmLight.Threading;
 using Serilog;
+using XportBand.ViewModel;
 
 namespace XportBand
 {
@@ -11,6 +12,13 @@ namespace XportBand
     public partial class App : Application
     {
 
+        private static ViewModelLocator _locator;
+
+        public static ViewModelLocator Locator
+        {
+            get { return _locator ?? (_locator = new ViewModelLocator()); }
+        }
+
         static App()
         {
             var levelSwitch = new Serilog.Core.LoggingLevelSwitch();
@@ -18,7 +26,7 @@ namespace XportBand
             {
                 Serilog.Debugging.SelfLog.Enable(msg => System.Diagnostics.Debug.WriteLine(msg));
                 levelSwitch.MinimumLevel = Serilog.Events.LogEventLevel.Verbose;
-                var debugLogTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {SourceContext} [{Level}] {Message}{NewLine}{Exception}";
+                var debugLogTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{SourceContext}] [{Level}] {Message}{NewLine}{Exception}";
                 Log.Logger = new LoggerConfiguration()
                                     .MinimumLevel.ControlledBy(levelSwitch)
                                     .WriteTo.Debug(outputTemplate: debugLogTemplate)

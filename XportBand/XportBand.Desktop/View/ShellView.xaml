@@ -15,8 +15,6 @@
                    MinHeight="400"
                    BorderBrush="{DynamicResource AccentColorBrush}"
                    BorderThickness="1"
-                   DataContext="{Binding Shell,
-                                         Source={StaticResource Locator}}"
                    GlowBrush="{DynamicResource AccentColorBrush}"
                    ShowIconOnTitleBar="True"
                    ShowTitleBar="True"
@@ -26,7 +24,7 @@
 
     <Grid x:Name="LayoutRoot">
 
-        <dock:DockingManager x:Name="dckManager">
+        <dock:DockingManager x:Name="dckManager" ActiveContentChanged="dckManager_ActiveContentChanged">
             <!--<dock:DockingManager.Theme>
                 <dockvs2013:Vs2013DarkTheme />
             </dock:DockingManager.Theme>-->
@@ -34,7 +32,8 @@
                 <dock:LayoutPanel Orientation="Horizontal">
                     <dock:LayoutAnchorablePaneGroup DockWidth="300" Orientation="Vertical">
                         <dock:LayoutAnchorablePane>
-                            <dock:LayoutAnchorable Title="Activities"
+                            <dock:LayoutAnchorable x:Name="dockMain"
+                                                   Title="Activities"
                                                    AutoHideMinWidth="300"
                                                    CanAutoHide="True"
                                                    CanClose="True"
@@ -51,7 +50,8 @@
                                 </Grid>-->
                                 <view:MainView x:Name="vwMain" />
                             </dock:LayoutAnchorable>
-                            <dock:LayoutAnchorable Title="Settings"
+                            <dock:LayoutAnchorable x:Name="dockSettings"
+                                                   Title="Settings"
                                                    AutoHideMinWidth="300"
                                                    CanAutoHide="True"
                                                    CanClose="False"
@@ -73,7 +73,8 @@
                     </dock:LayoutAnchorablePaneGroup>
                     <dock:LayoutDocumentPaneGroup>
                         <dock:LayoutDocumentPane>
-                            <dock:LayoutDocument Title="Activity Details"
+                            <dock:LayoutDocument x:Name="dockDetails"
+                                                 Title="Activity Details"
                                                  CanClose="False"
                                                  IconSource="/Resources/Settings.png">
                                 <Grid>
