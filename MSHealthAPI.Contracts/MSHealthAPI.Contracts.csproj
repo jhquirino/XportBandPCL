@@ -34,11 +34,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Extensions.cs" />
     <Compile Include="IMSHealthClient.Async.cs" />
     <Compile Include="IMSHealthClient.Main.cs" />
     <Compile Include="IMSHealthClient.Sync.cs" />
     <Compile Include="MSHealthError.cs" />
-    <Compile Include="MSHealthException.cs" />
     <Compile Include="MSHealthMapPointType.cs" />
     <Compile Include="MSHealthProfile.cs" />
     <Compile Include="MSHealthRedirectResult.cs" />

@@ -26,13 +26,13 @@ namespace XportBand.Model
 
         #region Setting Constants
 
-        private static string MSHealthTokenTypeKey = $"{nameof(MSHealthToken)}_{nameof(MSHealthToken.TokenType)}";
-        private static string MSHealthAccessTokenKey = $"{nameof(MSHealthToken)}_{nameof(MSHealthToken.AccessToken)}";
-        private static string MSHealthCreationTimeKey = $"{nameof(MSHealthToken)}_{nameof(MSHealthToken.CreationTime)}";
-        private static string MSHealthExpiresInKey = $"{nameof(MSHealthToken)}_{nameof(MSHealthToken.ExpiresIn)}";
-        private static string MSHealthExpirationTimeKey = $"{nameof(MSHealthToken)}_{nameof(MSHealthToken.ExpirationTime)}";
-        private static string MSHealthScopeKey = $"{nameof(MSHealthToken)}_{nameof(MSHealthToken.Scope)}";
-        private static string MSHealthRefreshTokenKey = $"{nameof(MSHealthToken)}_{nameof(MSHealthToken.RefreshToken)}";
+        private static readonly string MSHealthTokenTypeKey = $"{nameof(MSHealthToken)}_{nameof(MSHealthToken.TokenType)}";
+        private static readonly string MSHealthAccessTokenKey = $"{nameof(MSHealthToken)}_{nameof(MSHealthToken.AccessToken)}";
+        private static readonly string MSHealthCreationTimeKey = $"{nameof(MSHealthToken)}_{nameof(MSHealthToken.CreationTime)}";
+        private static readonly string MSHealthExpiresInKey = $"{nameof(MSHealthToken)}_{nameof(MSHealthToken.ExpiresIn)}";
+        private static readonly string MSHealthExpirationTimeKey = $"{nameof(MSHealthToken)}_{nameof(MSHealthToken.ExpirationTime)}";
+        private static readonly string MSHealthScopeKey = $"{nameof(MSHealthToken)}_{nameof(MSHealthToken.Scope)}";
+        private static readonly string MSHealthRefreshTokenKey = $"{nameof(MSHealthToken)}_{nameof(MSHealthToken.RefreshToken)}";
 
         #endregion
 
@@ -54,7 +54,7 @@ namespace XportBand.Model
                         CreationTime = AppSettings.GetValueOrDefault(MSHealthCreationTimeKey, DateTime.MinValue),
                         ExpiresIn = AppSettings.GetValueOrDefault(MSHealthExpiresInKey, 0L),
                         Scope = AppSettings.GetValueOrDefault(MSHealthScopeKey, string.Empty),
-                        RefreshToken = AppSettings.GetValueOrDefault(MSHealthRefreshTokenKey, string.Empty),
+                        RefreshToken = AppSettings.GetValueOrDefault(MSHealthRefreshTokenKey, string.Empty)
                     };
                 }
                 return _msHealthToken; /*/ = new MSHealthToken

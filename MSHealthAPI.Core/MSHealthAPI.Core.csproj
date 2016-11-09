@@ -50,6 +50,7 @@
     <Compile Include="MSHealthClient.Async.cs" />
     <Compile Include="MSHealthClient.Sync.cs" />
     <Compile Include="MSHealthClient.Main.cs" />
+    <Compile Include="MSHealthException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -58,31 +58,31 @@ namespace MSHealthAPI.Contracts
             Path = path;
             Query = query;
             // Check if inner exception is a WebException
-            WebException loWebException = innerException as WebException;
+            var loWebException = innerException as WebException;
             if (loWebException != null)
             {
                 // Get WebResponse for inner Exception, and handle it
                 if (loWebException.Response != null)
                 {
                     HttpWebResponse = loWebException.Response as HttpWebResponse;
-                    if (HttpWebResponse != null &&
-                        System.Diagnostics.Debugger.IsAttached)
-                        System.Diagnostics.Debug.WriteLine("Exception StatusCode: {0}", HttpWebResponse.StatusCode);
+                    if (HttpWebResponse != null)
+                        Serilog.Log.ForContext<MSHealthException>().Debug("StatusCode: {statusCode}", HttpWebResponse.StatusCode);
                     // Get response details
                     using (Stream loResponseStream = loWebException.Response.GetResponseStream())
                     {
                         using (StreamReader loStreamReader = new StreamReader(loResponseStream))
                         {
                             // Read response as string (must be a Json string)
-                            string lsErrorResponse = loStreamReader.ReadToEnd();
+                            var lsErrorResponse = loStreamReader.ReadToEnd();
+                            if (HttpWebResponse != null)
+                                Serilog.Log.ForContext<MSHealthException>().Verbose(lsErrorResponse);
                             if (!string.IsNullOrEmpty(lsErrorResponse))
                             {
                                 // Deserialize response (Json)
-                                JsonSerializerSettings loSerializerSettings = new JsonSerializerSettings();
+                                var loSerializerSettings = new JsonSerializerSettings();
                                 loSerializerSettings.Error = (sender, args) =>
                                 {
-                                    if (System.Diagnostics.Debugger.IsAttached)
-                                        System.Diagnostics.Debug.WriteLine(args.ErrorContext.Error.Message);
+                                    Serilog.Log.ForContext<MSHealthException>().Verbose(args.ErrorContext.Error.Message);
                                     args.ErrorContext.Handled = true;
                                 };
                                 Error = JsonConvert.DeserializeObject<MSHealthError>(lsErrorResponse, loSerializerSettings);

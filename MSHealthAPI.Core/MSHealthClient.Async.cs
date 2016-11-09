@@ -40,7 +40,7 @@ namespace MSHealthAPI.Core
             if (uri != null &&
                 uri.LocalPath.StartsWith(AUTH_PATH, StringComparison.OrdinalIgnoreCase))
             {
-                Serilog.Log.ForContext<MSHealthClient>().Debug("Handling MSHealthClient redirect.");
+                Serilog.Log.ForContext<MSHealthClient>().Verbose("Handling MSHealthClient redirect.");
                 var loValues = HttpUtility.ParseQueryString(uri.Query);
                 // Read Authentication Code
                 var loCode = loValues.FirstOrDefault((entry) => entry.Key.Equals("code", StringComparison.OrdinalIgnoreCase));
@@ -77,8 +77,8 @@ namespace MSHealthAPI.Core
                     IsSignedIn = false;
                     loResult = MSHealthRedirectResult.SignOut;
                 }
+                Serilog.Log.ForContext<MSHealthClient>().Verbose("MSHealthClient redirect handled. Result: {result}", loResult);
             }
-            Serilog.Log.ForContext<MSHealthClient>().Debug("MSHealthClient redirect handled. Result: {result}", loResult);
             return loResult;
         }
 
@@ -458,6 +458,7 @@ namespace MSHealthAPI.Core
                     {
                         using (var response = await httpClient.SendAsync(request))
                         {
+                            Serilog.Log.ForContext<MSHealthClient>().Debug("StatusCode: {statusCode}", response.StatusCode);
                             var lsResponse = await response.Content.ReadAsStringAsync();
                             Serilog.Log.ForContext<MSHealthClient>().Verbose(lsResponse);
                             // Parse JSON error (if exists)
@@ -519,12 +520,24 @@ namespace MSHealthAPI.Core
                         request.Headers.Authorization = new AuthenticationHeaderValue(Token.TokenType, Token.AccessToken);
                         using (var response = await httpClient.SendAsync(request))
                         {
-                            // Get response as string
-                            lsResponse = await response.Content.ReadAsStringAsync();
-                            Serilog.Log.ForContext<MSHealthClient>().Verbose(lsResponse);
+                            Serilog.Log.ForContext<MSHealthClient>().Debug("StatusCode: {statusCode}", response.StatusCode);
+                            if (response.IsSuccessStatusCode)
+                            {
+                                // Get response as string
+                                lsResponse = await response.Content.ReadAsStringAsync();
+                                Serilog.Log.ForContext<MSHealthClient>().Verbose(lsResponse);
+                            }
+                            else
+                            {
+                                throw new MSHealthException(response.ReasonPhrase, null, path, query);
+                            }
                         }
                     }
                 }
+            }
+            catch (MSHealthException)
+            {
+                throw;
             }
             catch (Exception loException)
             {
