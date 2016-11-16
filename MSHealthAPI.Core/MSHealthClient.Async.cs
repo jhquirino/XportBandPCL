@@ -5,9 +5,9 @@
 // <author>Jorge Alberto Hernández Quirino</author>
 //-----------------------------------------------------------------------
 using System;
+using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -452,22 +452,27 @@ namespace MSHealthAPI.Core
             Serilog.Log.ForContext<MSHealthClient>().Debug("GET {uri}", loUri.Uri);
             try
             {
-                using (var httpClient = new HttpClient())
+                // Perform request and handle response
+                var request = WebRequest.Create(loUri.Uri);
+                var responseTask = Task.Factory.FromAsync(request.BeginGetResponse, request.EndGetResponse, null);
+                using (var response = await responseTask)
                 {
-                    using (var request = new HttpRequestMessage(HttpMethod.Get, loUri.Uri))
+                    var httpResponse = response as HttpWebResponse;
+                    if (httpResponse != null)
+                        Serilog.Log.ForContext<MSHealthClient>().Debug("StatusCode: {statusCode}", httpResponse.StatusCode);
+                    using (var responseStream = response.GetResponseStream())
                     {
-                        using (var response = await httpClient.SendAsync(request))
+                        using (var streamReader = new StreamReader(responseStream))
                         {
-                            Serilog.Log.ForContext<MSHealthClient>().Debug("StatusCode: {statusCode}", response.StatusCode);
-                            var lsResponse = await response.Content.ReadAsStringAsync();
-                            Serilog.Log.ForContext<MSHealthClient>().Verbose(lsResponse);
+                            var responseString = await streamReader.ReadToEndAsync();
+                            Serilog.Log.ForContext<MSHealthClient>().Verbose(responseString);
                             // Parse JSON error (if exists)
-                            dynamic jsonResponse = JObject.Parse(lsResponse);
+                            dynamic jsonResponse = JObject.Parse(responseString);
                             var error = (string)jsonResponse.error;
                             if (!string.IsNullOrEmpty(error))
                                 throw new MSHealthException(error, null, loUri.Path, loUri.Query);
                             // Deserialize success Json response
-                            loToken = JsonConvert.DeserializeObject<MSHealthToken>(lsResponse);
+                            loToken = JsonConvert.DeserializeObject<MSHealthToken>(responseString);
                             if (string.IsNullOrEmpty(loToken.RefreshToken))
                                 loToken.RefreshToken = code;
                         }
@@ -513,24 +518,20 @@ namespace MSHealthAPI.Core
             try
             {
                 // Perform request and handle response
-                using (var httpClient = new HttpClient())
+                var request = WebRequest.Create(loUriBuilder.Uri);
+                request.Headers[HttpRequestHeader.Authorization] = string.Format("{0} {1}", Token.TokenType, Token.AccessToken);
+                var responseTask = Task.Factory.FromAsync(request.BeginGetResponse, request.EndGetResponse, null);
+                using (var response = await responseTask)
                 {
-                    using (var request = new HttpRequestMessage(HttpMethod.Get, loUriBuilder.Uri))
+                    var httpResponse = response as HttpWebResponse;
+                    if (httpResponse != null)
+                        Serilog.Log.ForContext<MSHealthClient>().Debug("StatusCode: {statusCode}", httpResponse.StatusCode);
+                    using (var responseStream = response.GetResponseStream())
                     {
-                        request.Headers.Authorization = new AuthenticationHeaderValue(Token.TokenType, Token.AccessToken);
-                        using (var response = await httpClient.SendAsync(request))
+                        using (var streamReader = new StreamReader(responseStream))
                         {
-                            Serilog.Log.ForContext<MSHealthClient>().Debug("StatusCode: {statusCode}", response.StatusCode);
-                            if (response.IsSuccessStatusCode)
-                            {
-                                // Get response as string
-                                lsResponse = await response.Content.ReadAsStringAsync();
-                                Serilog.Log.ForContext<MSHealthClient>().Verbose(lsResponse);
-                            }
-                            else
-                            {
-                                throw new MSHealthException(response.ReasonPhrase, null, path, query);
-                            }
+                            lsResponse = await streamReader.ReadToEndAsync();
+                            Serilog.Log.ForContext<MSHealthClient>().Verbose(lsResponse);
                         }
                     }
                 }
