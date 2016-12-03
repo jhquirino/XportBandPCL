@@ -2,6 +2,7 @@
 using Xamarin.Forms;
 using System.Threading;
 using System.Globalization;
+using XportBand.Extensions;
 
 [assembly: Dependency(typeof(XportBand.Droid.Localize))]
 namespace XportBand.Droid
@@ -13,7 +14,7 @@ namespace XportBand.Droid
 			Thread.CurrentThread.CurrentCulture = ci;
 			Thread.CurrentThread.CurrentUICulture = ci;
 
-			Console.WriteLine("CurrentCulture set: " + ci.Name);
+			Serilog.Log.ForContext<Localize>().Debug("CurrentCulture set: " + ci.Name);
 		}
 
 		public CultureInfo GetCurrentCultureInfo()
@@ -23,10 +24,10 @@ namespace XportBand.Droid
 			netLanguage = AndroidToDotnetLanguage(androidLocale.ToString().Replace("_", "-"));
 
 			// this gets called a lot - try/catch can be expensive so consider caching or something
-			System.Globalization.CultureInfo ci = null;
+			CultureInfo ci = null;
 			try
 			{
-				ci = new System.Globalization.CultureInfo(netLanguage);
+				ci = new CultureInfo(netLanguage);
 			}
 			catch (CultureNotFoundException e1)
 			{
@@ -35,14 +36,14 @@ namespace XportBand.Droid
 				try
 				{
 					var fallback = ToDotnetFallbackLanguage(new PlatformCulture(netLanguage));
-					Console.WriteLine(netLanguage + " failed, trying " + fallback + " (" + e1.Message + ")");
-					ci = new System.Globalization.CultureInfo(fallback);
+					Serilog.Log.ForContext<Localize>().Debug(netLanguage + " failed, trying " + fallback + " (" + e1.Message + ")");
+					ci = new CultureInfo(fallback);
 				}
 				catch (CultureNotFoundException e2)
 				{
 					// iOS language not valid .NET culture, falling back to English
-					Console.WriteLine(netLanguage + " couldn't be set, using 'en' (" + e2.Message + ")");
-					ci = new System.Globalization.CultureInfo("en");
+					Serilog.Log.ForContext<Localize>().Debug(netLanguage + " couldn't be set, using 'en' (" + e2.Message + ")");
+					ci = new CultureInfo("en");
 				}
 			}
 
@@ -51,7 +52,7 @@ namespace XportBand.Droid
 
 		string AndroidToDotnetLanguage(string androidLanguage)
 		{
-			Console.WriteLine("Android Language:" + androidLanguage);
+			Serilog.Log.ForContext<Localize>().Debug("Android Language:" + androidLanguage);
 			var netLanguage = androidLanguage;
 
 			//certain languages need to be converted to CultureInfo equivalent
@@ -72,12 +73,12 @@ namespace XportBand.Droid
 					// ONLY use cultures that have been tested and known to work
 			}
 
-			Console.WriteLine(".NET Language/Locale:" + netLanguage);
+			Serilog.Log.ForContext<Localize>().Debug(".NET Language/Locale:" + netLanguage);
 			return netLanguage;
 		}
 		string ToDotnetFallbackLanguage(PlatformCulture platCulture)
 		{
-			Console.WriteLine(".NET Fallback Language:" + platCulture.LanguageCode);
+			Serilog.Log.ForContext<Localize>().Debug(".NET Fallback Language:" + platCulture.LanguageCode);
 			var netLanguage = platCulture.LanguageCode; // use the first part of the identifier (two chars, usually);
 
 			switch (platCulture.LanguageCode)
@@ -89,7 +90,7 @@ namespace XportBand.Droid
 					// ONLY use cultures that have been tested and known to work
 			}
 
-			Console.WriteLine(".NET Fallback Language/Locale:" + netLanguage + " (application-specific)");
+			Serilog.Log.ForContext<Localize>().Debug(".NET Fallback Language/Locale:" + netLanguage + " (application-specific)");
 			return netLanguage;
 		}
 

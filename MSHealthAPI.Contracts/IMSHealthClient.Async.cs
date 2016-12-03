@@ -100,29 +100,29 @@ namespace MSHealthAPI.Contracts
         /// <returns><see cref="MSHealthProfile"/> instance with profile details.</returns>
         Task<MSHealthProfile> ReadProfileAsync();
 
-        /// <summary>
-        /// Refresh current <see cref="IMSHealthClient.Token"/>.
-        /// </summary>
-        /// <returns><see langword="true"/> if refresh successfull, otherwise, <see langword="false"/>.</returns>
-        /// <remarks>
-        /// It only works if <see cref="MSHealthToken.RefreshToken"/> is available, to obtain it,
-        /// it's necessary to set use <see cref="MSHealthScope.OfflineAccess"/>.
-        /// </remarks>
-        Task<bool> RefreshTokenAsync();
+		/// <summary>
+		/// Refresh current <see cref="Token"/>.
+		/// </summary>
+		/// <returns><see langword="true"/> if refresh successfull, otherwise, <see langword="false"/>.</returns>
+		/// <remarks>
+		/// It only works if <see cref="MSHealthToken.RefreshToken"/> is available, to obtain it,
+		/// it's necessary to set use <see cref="MSHealthScope.OfflineAccess"/>.
+		/// </remarks>
+		Task<bool> RefreshTokenAsync();
 
-        /// <summary>
-        /// Verifies <paramref name="token"/>instance validity (<see cref="MSHealthToken.ExpirationTime"/>),
-        /// replaces current <see cref="IMSHealthClient.Token"/> and if <paramref name="refreshIfInvalid"/>
-        /// is <see langword="true"/>, calls <see cref="IMSHealthClient.RefreshToken"/>.
-        /// </summary>
-        /// <param name="token">Instance of <see cref="MSHealthToken"/> to validate.</param>
-        /// <param name="refreshIfInvalid">Flag to enforce Token refresh if is not valid.</param>
-        /// <returns><see langword="true"/> if specified token is valid or has been refresh successfull, otherwise, <see langword="false"/>.</returns>
-        /// <remarks>
-        /// It only works if <see cref="MSHealthToken.RefreshToken"/> is available, to obtain it,
-        /// it's necessary to set use <see cref="MSHealthScope.OfflineAccess"/>.
-        /// </remarks>
-        Task<bool> ValidateTokenAsync(MSHealthToken token, bool refreshIfInvalid = true);
+		/// <summary>
+		/// Verifies <paramref name="token"/>instance validity (<see cref="MSHealthToken.ExpirationTime"/>),
+		/// replaces current <see cref="Token"/> and if <paramref name="refreshIfInvalid"/>
+		/// is <see langword="true"/>, calls <see cref="RefreshToken"/>.
+		/// </summary>
+		/// <param name="token">Instance of <see cref="MSHealthToken"/> to validate.</param>
+		/// <param name="refreshIfInvalid">Flag to enforce Token refresh if is not valid.</param>
+		/// <returns><see langword="true"/> if specified token is valid or has been refresh successfull, otherwise, <see langword="false"/>.</returns>
+		/// <remarks>
+		/// It only works if <see cref="MSHealthToken.RefreshToken"/> is available, to obtain it,
+		/// it's necessary to set use <see cref="MSHealthScope.OfflineAccess"/>.
+		/// </remarks>
+		Task<bool> ValidateTokenAsync(MSHealthToken token, bool refreshIfInvalid = true);
 
         #endregion
 

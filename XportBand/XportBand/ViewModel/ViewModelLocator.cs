@@ -113,6 +113,7 @@ namespace XportBand.ViewModel
             var navigationSvc = new NavigationService();
             SimpleIoc.Default.Register<INavigationService>(() => navigationSvc);
             navigationSvc.Configure(nameof(MainView), typeof(MainView));
+			navigationSvc.Configure(nameof(SettingsView), typeof(SettingsView));
             navigationSvc.Initialize((NavigationPage)Application.Current.MainPage);
 #endif
 #if DESKTOP

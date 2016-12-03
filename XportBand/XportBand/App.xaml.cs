@@ -3,6 +3,7 @@ using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 using Xamarin.Forms;
+using XportBand.Extensions;
 using XportBand.View;
 using XportBand.ViewModel;
 

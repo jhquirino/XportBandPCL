@@ -5,7 +5,7 @@ using System.Resources;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace XportBand
+namespace XportBand.Extensions
 {
 
 	/// <summary>
@@ -74,7 +74,7 @@ namespace XportBand
 	[ContentProperty("Text")]
 	public class TranslateExtension : IMarkupExtension
 	{
-		readonly CultureInfo ci = null;
+		readonly CultureInfo ci;
 		const string ResourceId = "XportBand.Properties.Resources";
 
 		public TranslateExtension()
@@ -92,9 +92,9 @@ namespace XportBand
 			if (Text == null)
 				return "";
 
-			ResourceManager temp = new ResourceManager(ResourceId, typeof(TranslateExtension).GetTypeInfo().Assembly);
+			var rsxMgr = new ResourceManager(ResourceId, typeof(TranslateExtension).GetTypeInfo().Assembly);
 
-			var translation = temp.GetString(Text, ci);
+			var translation = rsxMgr.GetString(Text, ci);
 			if (translation == null)
 			{
 #if DEBUG

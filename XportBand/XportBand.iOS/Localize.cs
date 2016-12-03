@@ -2,6 +2,7 @@
 using System.Threading;
 using Foundation;
 using Serilog;
+using XportBand.Extensions;
 
 [assembly: Xamarin.Forms.Dependency(typeof(XportBand.iOS.Localize))]
 namespace XportBand.iOS
@@ -12,7 +13,7 @@ namespace XportBand.iOS
 		{
 			Thread.CurrentThread.CurrentCulture = ci;
 			Thread.CurrentThread.CurrentUICulture = ci;
-			Log.Debug("CurrentCulture set: " + ci.Name);
+			Log.ForContext<Localize>().Debug("CurrentCulture set: " + ci.Name);
 		}
 
 		public CultureInfo GetCurrentCultureInfo()
@@ -38,13 +39,13 @@ namespace XportBand.iOS
 				try
 				{
 					var fallback = ToDotnetFallbackLanguage(new PlatformCulture(netLanguage));
-					Log.Debug(netLanguage + " failed, trying " + fallback + " (" + e1.Message + ")");
+					Log.ForContext<Localize>().Debug(netLanguage + " failed, trying " + fallback + " (" + e1.Message + ")");
 					ci = new CultureInfo(fallback);
 				}
 				catch (CultureNotFoundException e2)
 				{
 					// iOS language not valid .NET culture, falling back to English
-					Log.Debug(netLanguage + " couldn't be set, using 'en' (" + e2.Message + ")");
+					Log.ForContext<Localize>().Debug(netLanguage + " couldn't be set, using 'en' (" + e2.Message + ")");
 					ci = new CultureInfo("en");
 				}
 			}
@@ -54,7 +55,7 @@ namespace XportBand.iOS
 
 		string iOSToDotnetLanguage(string iOSLanguage)
 		{
-			Log.Debug("iOS Language:" + iOSLanguage);
+			Log.ForContext<Localize>().Debug("iOS Language:" + iOSLanguage);
 			var netLanguage = iOSLanguage;
 
 			//certain languages need to be converted to CultureInfo equivalent
@@ -71,12 +72,12 @@ namespace XportBand.iOS
 					// ONLY use cultures that have been tested and known to work
 			}
 
-			Log.Debug(".NET Language/Locale:" + netLanguage);
+			Log.ForContext<Localize>().Debug(".NET Language/Locale:" + netLanguage);
 			return netLanguage;
 		}
 		string ToDotnetFallbackLanguage(PlatformCulture platCulture)
 		{
-			Log.Debug(".NET Fallback Language:" + platCulture.LanguageCode);
+			Log.ForContext<Localize>().Debug(".NET Fallback Language:" + platCulture.LanguageCode);
 			var netLanguage = platCulture.LanguageCode; // use the first part of the identifier (two chars, usually);
 
 			switch (platCulture.LanguageCode)
@@ -92,7 +93,7 @@ namespace XportBand.iOS
 					// ONLY use cultures that have been tested and known to work
 			}
 
-			Log.Debug(".NET Fallback Language/Locale:" + netLanguage + " (application-specific)");
+			Log.ForContext<Localize>().Debug(".NET Fallback Language/Locale:" + netLanguage + " (application-specific)");
 			return netLanguage;
 		}
 	}

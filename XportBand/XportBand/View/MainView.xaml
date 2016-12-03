@@ -2,16 +2,20 @@
 <ContentPage x:Class="XportBand.View.MainView"
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:i18n="clr-namespace:XportBand;assembly=XportBand"
-             Title="{i18n:Translate TitleApp}">
-
-    <!--<ContentPage.ToolbarItems>
+             xmlns:ext="clr-namespace:XportBand.Extensions;assembly=XportBand"
+             Title="{ext:Translate TitleApp}">
+    <ContentPage.ToolbarItems>
         <ToolbarItem Name="Refresh"
                      Command="{Binding ListActivitiesCommand}"
                      Order="Primary"
                      Priority="0"
-                     Text="{i18n:Translate ButtonRefresh}" />
-    </ContentPage.ToolbarItems>-->
+                     Text="{ext:Translate ButtonDetails}" />
+        <ToolbarItem Name="Settings"
+                     Command="{Binding GoToSettingsCommand}"
+                     Order="Secondary"
+                     Priority="1"
+                     Text="{ext:Translate ButtonSettings}" />
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
@@ -19,31 +23,50 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <!--<Label Grid.Row="0"
-                   Grid.Column="0"
-                   HorizontalOptions="Start"
-                   VerticalOptions="Center"
-                   Text="{i18n:Translate TitleApp}" />-->
-            <Label Grid.Row="1"
-                   Grid.Column="0"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center"
-                   Text="MVVM Xamarin Forms!" />
-            <!--<StackLayout Grid.Row="2"
-                         Grid.Column="0"
-                         HorizontalOptions="CenterAndExpand"
-                         Orientation="Horizontal">
-                <Button Text="{i18n:Translate ButtonSettings}" />
-                <Button Command="{Binding ListActivitiesCommand}" Text="{i18n:Translate ButtonRefresh}" />
-                <Button Text="{i18n:Translate ButtonDetails}" />
-            </StackLayout>-->
+            <ActivityIndicator Grid.Row="0"
+                               Grid.Column="0"
+                               IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}" />
+            <ListView Grid.Row="1"
+                      Grid.Column="0"
+                      ItemsSource="{Binding Activities}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Row="0"
+                                       Grid.RowSpan="2"
+                                       Grid.Column="0"
+                                       Margin="5"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"
+                                       Text="{Binding Type}" />
+                                <Label Grid.Row="0"
+                                       Grid.Column="1"
+                                       Margin="5"
+                                       HorizontalOptions="Start"
+                                       VerticalOptions="Center"
+                                       Text="{Binding Duration.Value}" />
+                                <Label Grid.Row="0"
+                                       Grid.Column="2"
+                                       Margin="5"
+                                       HorizontalOptions="Start"
+                                       VerticalOptions="Center"
+                                       Text="{Binding StartTime, StringFormat='{0:yyyy-MM-dd HH:mm}'}" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </Grid>
     </ContentPage.Content>
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Name="Refresh"
-                     Command="{Binding ListActivitiesCommand}"
-                     Order="Primary"
-                     Priority="0"
-                     Text="{i18n:Translate ButtonDetails}" />
-    </ContentPage.ToolbarItems>
 </ContentPage>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using XportBand.Model;
 using XportBand.ViewModel;
 
 namespace XportBand.View
@@ -24,6 +25,14 @@ namespace XportBand.View
 		{
 			InitializeComponent();
 			BindingContext = App.Locator.Main;
+		}
+
+		protected override void OnAppearing()
+		{
+			base.OnAppearing();
+			var navigable = ViewModel as INavigable;
+			if (navigable != null)
+				navigable.Activate(null);
 		}
 
 	}

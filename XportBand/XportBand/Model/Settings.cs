@@ -1,20 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MSHealthAPI.Contracts;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 
 namespace XportBand.Model
 {
-    /// <summary>
-    /// This is the Settings static class that can be used in your Core solution or in any
-    /// of your client applications. All settings are laid out the same exact way with getters
-    /// and setters. 
-    /// </summary>
-    public static class Settings
+	/// <summary>
+	/// This is the Settings static class that can be used in your Core solution or in any
+	/// of your client applications. All settings are laid out the same exact way with getters
+	/// and setters. 
+	/// </summary>
+	public static class Settings
     {
         private static ISettings AppSettings
         {
@@ -51,30 +47,23 @@ namespace XportBand.Model
                     {
                         TokenType = AppSettings.GetValueOrDefault(MSHealthTokenTypeKey, MSHealthToken.TOKEN_TYPE),
                         AccessToken = AppSettings.GetValueOrDefault(MSHealthAccessTokenKey, string.Empty),
-                        CreationTime = AppSettings.GetValueOrDefault(MSHealthCreationTimeKey, DateTime.MinValue),
+						CreationTime = AppSettings.GetValueOrDefault(MSHealthCreationTimeKey, DateTime.MinValue).ToLocalTime(),
                         ExpiresIn = AppSettings.GetValueOrDefault(MSHealthExpiresInKey, 0L),
                         Scope = AppSettings.GetValueOrDefault(MSHealthScopeKey, string.Empty),
                         RefreshToken = AppSettings.GetValueOrDefault(MSHealthRefreshTokenKey, string.Empty)
                     };
                 }
-                return _msHealthToken; /*/ = new MSHealthToken
-                {
-                    TokenType = AppSettings.GetValueOrDefault(MSHealthTokenTypeKey, MSHealthToken.TOKEN_TYPE),
-                    AccessToken = AppSettings.GetValueOrDefault(MSHealthAccessTokenKey, string.Empty),
-                    CreationTime = AppSettings.GetValueOrDefault(MSHealthCreationTimeKey, DateTime.MinValue),
-                    ExpiresIn = AppSettings.GetValueOrDefault(MSHealthExpiresInKey, 0L),
-                    Scope = AppSettings.GetValueOrDefault(MSHealthScopeKey, string.Empty),
-                    RefreshToken = AppSettings.GetValueOrDefault(MSHealthRefreshTokenKey, string.Empty),
-                };//*/
+                return _msHealthToken;
             }
             set
             {
-                if (_msHealthToken == value) return;
+                if (_msHealthToken == value)
+					return;
                 if (value != null)
                 {
                     AppSettings.AddOrUpdateValue(MSHealthTokenTypeKey, value.TokenType);
                     AppSettings.AddOrUpdateValue(MSHealthAccessTokenKey, value.AccessToken);
-                    AppSettings.AddOrUpdateValue(MSHealthCreationTimeKey, value.CreationTime);
+					AppSettings.AddOrUpdateValue(MSHealthCreationTimeKey, value.CreationTime.ToUniversalTime());
                     AppSettings.AddOrUpdateValue(MSHealthExpiresInKey, value.ExpiresIn);
                     AppSettings.AddOrUpdateValue(MSHealthExpirationTimeKey, value.ExpirationTime);
                     AppSettings.AddOrUpdateValue(MSHealthScopeKey, value.Scope);

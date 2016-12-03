@@ -103,7 +103,7 @@ namespace MSHealthAPI.Contracts
                     // Initialize GPX Track/Segment node
                     loTrack = new XElement(loNamespaceDefault + "trk");
                     loSegment = new XElement(loNamespaceDefault + "trkseg");
-                    List<MSHealthMapPoint> loMapPoints = new List<MSHealthMapPoint>();
+                    var loMapPoints = new List<MSHealthMapPoint>();
                     if (ignoreEmptyMapPoints)
                         loMapPoints = activity.MapPoints.OrderBy(loMP => loMP.Ordinal).ToList();
                     else
@@ -237,9 +237,9 @@ namespace MSHealthAPI.Contracts
                     activity.SplitDistance != null)
                 {
                     ldDistanceInMeters = activity.DistanceSummary.TotalDistance.Value / activity.SplitDistance.Value;
-                    if (activity.SplitDistance.Value == MSHealthActivity.SPLIT_DISTANCE_KILOMETER)
+					if (activity.SplitDistance.Value.Equals(MSHealthActivity.SPLIT_DISTANCE_KILOMETER))
                         ldDistanceInMeters = ldDistanceInMeters * 1000;
-                    else if (activity.SplitDistance.Value == MSHealthActivity.SPLIT_DISTANCE_MILE)
+					else if (activity.SplitDistance.Value.Equals(MSHealthActivity.SPLIT_DISTANCE_MILE))
                         ldDistanceInMeters = ldDistanceInMeters * 1609.344;
                     loLap.Add(new XElement(loNamespaceDefault + "DistanceMeters", ldDistanceInMeters));
                 }
@@ -266,7 +266,7 @@ namespace MSHealthAPI.Contracts
                 {
                     // Initialize TCX Track
                     loTrack = new XElement(loNamespaceDefault + "Track");
-                    List<MSHealthMapPoint> loMapPoints = new List<MSHealthMapPoint>();
+                    var loMapPoints = new List<MSHealthMapPoint>();
                     if (ignoreEmptyMapPoints)
                         loMapPoints = activity.MapPoints.OrderBy(loMP => loMP.Ordinal).ToList();
                     else
@@ -315,9 +315,9 @@ namespace MSHealthAPI.Contracts
                         if (loMapPoint.TotalDistance != null)
                         {
                             ldDistanceInMeters = loMapPoint.TotalDistance.Value / activity.SplitDistance.Value;
-                            if (activity.SplitDistance.Value == MSHealthActivity.SPLIT_DISTANCE_KILOMETER)
+							if (activity.SplitDistance.Value.Equals(MSHealthActivity.SPLIT_DISTANCE_KILOMETER))
                                 ldDistanceInMeters = ldDistanceInMeters * 1000;
-                            else if (activity.SplitDistance.Value == MSHealthActivity.SPLIT_DISTANCE_MILE)
+							else if (activity.SplitDistance.Value.Equals(MSHealthActivity.SPLIT_DISTANCE_MILE))
                                 ldDistanceInMeters = ldDistanceInMeters * 1609.344;
                             loTrackpoint.Add(new XElement(loNamespaceDefault + "DistanceMeters", ldDistanceInMeters));
                         }

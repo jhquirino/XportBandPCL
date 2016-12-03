@@ -46,10 +46,10 @@ namespace MSHealthAPI.Contracts
         /// Receive a refresh token so it can work offline even when the user isn't active.
         /// </summary>
         OfflineAccess = 16,
-        /// <summary>
-        /// All previous access listed (except <see cref="MSHealthScope.None"/>).
-        /// </summary>
-        All = 32,
+		/// <summary>
+		/// All previous access listed (except <see cref="None"/>).
+		/// </summary>
+		All = 32,
     }
 
 }

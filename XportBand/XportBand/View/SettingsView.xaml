@@ -1,8 +1,89 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<ContentPage x:Class="XportBand.View.SettingsView"
-             xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:i18n="clr-namespace:XportBand;assembly=XportBand"
-             Title="{i18n:Translate TitleApp}">
-    <ContentPage.Content />
-</ContentPage>
+<TabbedPage x:Class="XportBand.View.SettingsView"
+            xmlns="http://xamarin.com/schemas/2014/forms"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:b="clr-namespace:XportBand.Behaviors;assembly=XportBand"
+            xmlns:c="clr-namespace:XportBand.Converters;assembly=XportBand"
+            xmlns:ext="clr-namespace:XportBand.Extensions;assembly=XportBand"
+            Title="{ext:Translate TitleApp}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <c:InverseBoolConverter x:Key="InverseBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage Title="Services">
+        <ContentPage.Content>
+            <Grid>
+                <Grid IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}" IsVisible="{Binding ShowSignIn, Converter={StaticResource InverseBoolConverter}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Row="0"
+                               Grid.RowSpan="3"
+                               Grid.Column="0"
+                               Margin="5"
+                               WidthRequest="56"
+                               HeightRequest="56"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               Aspect="Fill"
+                               Source="{ext:ImageResource MicrosoftHealthLogo.png}" />
+                        <Label Grid.Row="0"
+                               Grid.Column="1"
+                               Grid.ColumnSpan="2"
+                               Text="Microsoft Health" />
+                        <StackLayout Grid.Row="1"
+                                     Grid.Column="1"
+                                     Grid.ColumnSpan="2"
+                                     Orientation="Horizontal">
+                            <Button Margin="5,0"
+                                    Command="{Binding SignInMSHealthCommand}"
+                                    IsVisible="{Binding IsMSHealthSignedIn, Converter={StaticResource InverseBoolConverter}}"
+                                    Text="Sign-in" />
+                            <Button Margin="5,0"
+                                    Command="{Binding SignOutMSHealthCommand}"
+                                    IsVisible="{Binding IsMSHealthSignedIn}"
+                                    Text="Sign-out" />
+                            <ActivityIndicator IsRunning="{Binding IsMSHealthBusy}" IsVisible="{Binding IsMSHealthBusy}" />
+                        </StackLayout>
+                        <Label Grid.Row="2"
+                               Grid.Column="1"
+                               Grid.ColumnSpan="2"
+                               Text="{Binding MSHealthProfileName}" />
+                        <Label Grid.Row="3"
+                               Grid.Column="1"
+                               Text="Distance unit: " />
+                        <Picker Grid.Row="3" Grid.Column="2" />
+                    </Grid>
+                </Grid>
+                <WebView x:Name="wvwSignIn" IsVisible="{Binding ShowSignIn}">
+                    <WebView.Behaviors>
+                        <b:EventToCommandBehavior Command="{Binding NavigatedCommand}" EventName="Navigated" />
+                    </WebView.Behaviors>
+                </WebView>
+            </Grid>
+        </ContentPage.Content>
+    </ContentPage>
+    <ContentPage Title="About">
+        <ContentPage.Content>
+            <Grid>
+                <Label Text="About XportBand" />
+            </Grid>
+        </ContentPage.Content>
+    </ContentPage>
+</TabbedPage>

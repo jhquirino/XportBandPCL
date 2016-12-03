@@ -14,6 +14,18 @@ namespace XportBand.Services
 		private readonly Dictionary<string, Type> _pagesByKey = new Dictionary<string, Type>();
 		private NavigationPage _navigation;
 
+		private bool EnsureMainPage()
+		{
+			if (_navigation == null)
+			{
+				if (Application.Current.MainPage == null)
+					return false;
+				_navigation = Application.Current.MainPage as NavigationPage;
+				if (_navigation == null) return false;
+			}
+			return true;
+		}
+
 		public string CurrentPageKey
 		{
 			get
@@ -36,16 +48,19 @@ namespace XportBand.Services
 
 		public void GoBack()
 		{
+			if (!EnsureMainPage()) return;
 			_navigation.PopAsync();
 		}
 
 		public void NavigateTo(string pageKey)
 		{
+			if (!EnsureMainPage()) return;
 			NavigateTo(pageKey, null);
 		}
 
 		public void NavigateTo(string pageKey, object parameter)
 		{
+			if (!EnsureMainPage()) return;
 			lock (_pagesByKey)
 			{
 				if (_pagesByKey.ContainsKey(pageKey))

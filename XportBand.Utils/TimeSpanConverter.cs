@@ -26,7 +26,7 @@ namespace Newtonsoft.Json.Converters
         /// <param name="serializer">The calling <see cref="JsonSerializer"/>.</param>
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            TimeSpan loTimeSpan = (TimeSpan)value;
+            var loTimeSpan = (TimeSpan)value;
             string lsTimeSpanString = XmlConvert.ToString(loTimeSpan);
             serializer.Serialize(writer, lsTimeSpanString);
         }
@@ -34,7 +34,7 @@ namespace Newtonsoft.Json.Converters
         /// <summary>
         /// Reads the JSON representation of the <see cref="TimeSpan"/>.
         /// </summary>
-        /// <param name="reader">The <see cref="JsonReader/> to read from.</param>
+        /// <param name="reader">The <see cref="JsonReader"/> to read from.</param>
         /// <param name="objectType">Type of the object (<see cref="TimeSpan"/>).</param>
         /// <param name="existingValue">The existing value of <see cref="TimeSpan"/> being read.</param>
         /// <param name="serializer">The calling <see cref="JsonSerializer"/>.</param>
